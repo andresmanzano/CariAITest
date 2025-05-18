@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Horas Laborales</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #chartContainer {
+            width: 300px;
+            height: 300px;
+            margin: auto;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        #hoursChart {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .concept-group {
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .concept-group h4 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.1em;
+        }
+        .concept-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .concept-input-group label {
+            flex-basis: 80px;
+        }
+        .concept-input-group input[type="text"] {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calculadora de Horas Laborales</h2>
+
+        <div class="form-group">
+            <label for="attendanceIn">Hora de Entrada:</label>
+            <input type="time" id="attendanceIn" class="timepicker" value="00:00" min="00:00" max="23:59">
+        </div>
+
+        <div class="form-group">
+            <label for="attendanceOut">Hora de Salida:</label>
+            <input type="time" id="attendanceOut" class="timepicker" value="10:30" min="00:00" max="23:59">
+        </div>
+
+        <h3>Configuración de Conceptos</h3>
+        <div id="concepts-container">
+            <div class="concept-group">
+                <h4>Concepto 1</h4>
+                <div class="concept-input-group">
+                    <label>ID:</label>
+                    <input type="text" class="concept-id" value="HO" disabled="disabled">
+                </div>
+                <div class="concept-input-group">
+                    <label>Nombre:</label>
+                    <input type="text" class="concept-name" value="HO" disabled="disabled">
+                </div>
+                <div class="concept-input-group">
+                    <label>Inicio:</label>
+                    <input type="time" class="concept-start timepicker" value="08:00" min="00:00" max="23:59">
+                </div>
+                <div class="concept-input-group">
+                    <label>Fin:</label>
+                    <input type="time" class="concept-end timepicker" value="17:59" min="00:00" max="23:59">
+                </div>
+            </div>
+            <div class="concept-group">
+                <h4>Concepto 2</h4>
+                <div class="concept-input-group">
+                    <label>ID:</label>
+                    <input type="text" class="concept-id" value="HED" disabled="disabled">
+                </div>
+                <div class="concept-input-group">
+                    <label>Nombre:</label>
+                    <input type="text" class="concept-name" value="HED" disabled="disabled">
+                </div>
+                <div class="concept-input-group">
+                    <label>Inicio:</label>
+                    <input type="time" class="concept-start timepicker" value="18:00" min="00:00" max="23:59">
+                </div>
+                <div class="concept-input-group">
+                    <label>Fin:</label>
+                    <input type="time" class="concept-end timepicker" value="20:59" min="00:00" max="23:59">
+                </div>
+            </div>
+            <div class="concept-group">
+                <h4>Concepto 3</h4>
+                <div class="concept-input-group">
+                    <label>ID:</label>
+                    <input type="text" class="concept-id" value="HEN" disabled="disabled">
+                </div>
+                <div class="concept-input-group">
+                    <label>Nombre:</label>
+                    <input type="text" class="concept-name" value="HEN" disabled="disabled">
+                </div>
+                <div class="concept-input-group">
+                    <label>Inicio:</label>
+                    <input type="time" class="concept-start timepicker" value="21:00" min="00:00" max="23:59">
+                </div>
+                <div class="concept-input-group">
+                    <label>Fin:</label>
+                    <input type="time" class="concept-end timepicker" value="05:59" min="00:00" max="23:59">
+                </div>
+            </div>
+        </div>
+
+        <button onclick="sendData();">Calcular Horas</button>
+
+        
+        <div id="chartContainer" style="display:none;">
+            <canvas id="hoursChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let myPieChart; // Variable para almacenar la instancia del gráfico
+
+        function sendData() {
+
+            var attendanceIn = $("#attendanceIn").val();
+            var attendanceOut = $("#attendanceOut").val();
+            var concepts = [];
+            $("#concepts-container .concept-group").each(function() {
+                var concept = {
+                    id: $(this).find(".concept-id").val(),
+                    name: $(this).find(".concept-name").val(),
+                    start: $(this).find(".concept-start").val(),
+                    end: $(this).find(".concept-end").val()
+                };
+                concepts.push(concept);
+            });
+
+            var params = {
+                attendanceIn: attendanceIn,
+                attendanceOut: attendanceOut,
+                concepts: concepts
+            };
+
+            var xhr = new XMLHttpRequest();
+            var url = 'https://falconcloud.co/site_srv10_ph/site/api/qserv.php/13465-770721';
+
+            xhr.open('POST', url);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    var data = JSON.parse(xhr.responseText);
+                    console.log("response data: ",data);
+                    drawPieChart(data);
+                    $("#chartContainer").slideDown();
+                } else {
+                    console.log("Error: " + xhr.status);
+                    alert("Error al calcular las horas.");
+                    $("#chartContainer").slideUp();
+                }
+            };
+
+            xhr.onerror = function() {
+                console.log("Error de red.");
+                alert("Error de red.");
+                $("#chartContainer").slideUp();
+            };
+
+            xhr.send(JSON.stringify(params));
+        }
+
+        function drawPieChart(data) {
+            const ctx = document.getElementById('hoursChart').getContext('2d');
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+            const backgroundColors = [
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(54, 162, 235, 0.8)',
+                'rgba(255, 206, 86, 0.8)',
+                'rgba(75, 192, 192, 0.8)',
+                'rgba(153, 102, 255, 0.8)',
+                'rgba(255, 159, 64, 0.8)'
+            ];
+            const borderColors = [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ];
+
+            // Destruir el gráfico existente si hay uno
+            if (myPieChart) {
+                myPieChart.destroy();
+            }
+
+            myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Horas por Categoría',
+                        data: values,
+                        backgroundColor: backgroundColors.slice(0, labels.length),
+                        borderColor: borderColors.slice(0, labels.length),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribución de Horas Laborales'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
